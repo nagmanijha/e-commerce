@@ -1,11 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { assets } from "../assets/assets";
-import { useAppContext } from "../context/AppContext";
+import { assets } from "../../assets/assets";
+import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
+import axios from "axios"; // It's good practice to import axios here if used
 
 const Navbar = () => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const {
     user,
     setUser,
@@ -13,9 +14,9 @@ const Navbar = () => {
     navigate,
     setSearchQuery,
     searchQuery,
-    getCartCount,
-    axios,
+    getCartCount, // This is now a number, not a function
   } = useAppContext();
+
   const logout = async () => {
     try {
       const { data } = await axios.get("/api/user/logout");
@@ -30,11 +31,12 @@ const Navbar = () => {
       toast.error(error.message);
     }
   };
+
   useEffect(() => {
     if (searchQuery.length > 0) {
       navigate("/products");
     }
-  }, [searchQuery]);
+  }, [searchQuery, navigate]);
 
   return (
     <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
@@ -51,11 +53,12 @@ const Navbar = () => {
         <div className="hidden lg:flex items-center text-sm gap-2 border border-gray-300 px-3 rounded-full">
           <input
             onChange={(e) => setSearchQuery(e.target.value)}
+            value={searchQuery} // Controlled component
             className="py-1.5 w-full bg-transparent outline-none placeholder-gray-500"
             type="text"
             placeholder="Search products"
           />
-          <im src={assets.search_icon} alt="search" className="w-4 h-4" />
+          <img src={assets.search_icon} alt="search" className="w-4 h-4" />
         </div>
 
         <div
@@ -68,7 +71,7 @@ const Navbar = () => {
             className="w-6 opacity-80"
           />
           <button className="absolute -top-2 -right-3 text-xs text-white bg-[var(--color-primary)] w-[18px] h-[18px] rounded-full">
-            {getCartCount()}
+            {getCartCount} {/* FIXED */}
           </button>
         </div>
 
@@ -110,15 +113,13 @@ const Navbar = () => {
             className="w-6 opacity-80"
           />
           <button className="absolute -top-2 -right-3 text-xs text-white bg-[var(--color-primary)] w-[18px] h-[18px] rounded-full">
-            {getCartCount()}
+            {getCartCount} {/* FIXED */}
           </button>
         </div>
         <button
-          onClick={() => (open ? setOpen(false) : setOpen(true))}
+          onClick={() => setOpen(!open)}
           aria-label="Menu"
-          className=""
         >
-          {/* Menu Icon SVG */}
           <img src={assets.menu_icon} alt="menu" />
         </button>
       </div>
@@ -126,9 +127,7 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {open && (
         <div
-          className={`${
-            open ? "flex" : "hidden"
-          } absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 text-sm md:hidden`}
+          className={`absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex flex-col items-start gap-2 px-5 text-sm md:hidden`}
         >
           <NavLink to="/" onClick={() => setOpen(false)}>
             Home
@@ -137,8 +136,8 @@ const Navbar = () => {
             All Products
           </NavLink>
           {user && (
-            <NavLink to="/products" onClick={() => setOpen(false)}>
-              MY Orders
+            <NavLink to="/my-orders" onClick={() => setOpen(false)}>
+              My Orders
             </NavLink>
           )}
           <NavLink to="/" onClick={() => setOpen(false)}>
@@ -150,14 +149,14 @@ const Navbar = () => {
                 setOpen(false);
                 setShowUserLogin(true);
               }}
-              className="cursor-pointer px-6 py-2 mt-2 bg-[var(--color-primary)] bg-[var(--color-primary-dull)] transition text-white rounded-full text-sm"
+              className="cursor-pointer px-6 py-2 mt-2 bg-[var(--color-primary)] hover:bg-[var(--color-primary-dull)] transition text-white rounded-full text-sm"
             >
               Login
             </button>
           ) : (
             <button
               onClick={logout}
-              className="cursor-pointer px-6 py-2 mt-2 bg-[var(--color-primary)] bg-[var(--color-primary-dull)] transition text-white rounded-full text-sm"
+              className="cursor-pointer px-6 py-2 mt-2 bg-[var(--color-primary)] hover:bg-[var(--color-primary-dull)] transition text-white rounded-full text-sm"
             >
               Logout
             </button>
