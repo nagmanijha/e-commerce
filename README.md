@@ -1,5 +1,3 @@
-Of course. Here is a comprehensive README.md for your project's frontend, structured for clarity and ease of use.
-
 🛍️ E-Commerce Platform - Frontend
 This is the frontend for a modern, full-featured e-commerce application built with React. It provides a seamless shopping experience for users and a powerful dashboard for sellers to manage their products and orders.
 
