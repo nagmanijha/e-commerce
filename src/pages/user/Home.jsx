@@ -1,9 +1,9 @@
 import React from "react";
-import MainBanner from "../components/MainBanner";
-import Categories from "../components/Categories";
-import BestSeller from "../components/BestSeller";
-import BottomBanner from "../components/BottomBanner";
-import NewsLetter from "../components/NewsLetter";
+import MainBanner from "../../components/home/MainBanner";
+import Categories from "../../components/home/Categories";
+import BestSeller from "../../components/home/BestSeller";
+import BottomBanner from "../../components/home/BottomBanner";
+import NewsLetter from "../../components/home/NewsLetter";
 
 const Home = () => {
   return (
